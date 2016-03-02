@@ -14,13 +14,13 @@
 		AB33E0C11BB035C60006373B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB33E0BF1BB035C60006373B /* LaunchScreen.storyboard */; };
 		AB33E0CC1BB035C60006373B /* SmartScrollViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB33E0CB1BB035C60006373B /* SmartScrollViewTests.swift */; };
 		AB33E0D71BB035C60006373B /* SmartScrollViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB33E0D61BB035C60006373B /* SmartScrollViewUITests.swift */; };
-		ABBDCF291BB14174004EBB6E /* iMac.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF221BB14174004EBB6E /* iMac.png */; settings = {ASSET_TAGS = (); }; };
-		ABBDCF2A1BB14174004EBB6E /* iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF231BB14174004EBB6E /* iPad.png */; settings = {ASSET_TAGS = (); }; };
-		ABBDCF2B1BB14174004EBB6E /* iPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF241BB14174004EBB6E /* iPhone.png */; settings = {ASSET_TAGS = (); }; };
-		ABBDCF2D1BB14174004EBB6E /* Mac mini.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF261BB14174004EBB6E /* Mac mini.png */; settings = {ASSET_TAGS = (); }; };
-		ABBDCF2E1BB14174004EBB6E /* Mac Pro.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF271BB14174004EBB6E /* Mac Pro.png */; settings = {ASSET_TAGS = (); }; };
-		ABBDCF2F1BB14174004EBB6E /* MacBook.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF281BB14174004EBB6E /* MacBook.png */; settings = {ASSET_TAGS = (); }; };
-		ABBDCF311BB14451004EBB6E /* iPod.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF301BB14451004EBB6E /* iPod.png */; settings = {ASSET_TAGS = (); }; };
+		ABBDCF291BB14174004EBB6E /* iMac.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF221BB14174004EBB6E /* iMac.png */; };
+		ABBDCF2A1BB14174004EBB6E /* iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF231BB14174004EBB6E /* iPad.png */; };
+		ABBDCF2B1BB14174004EBB6E /* iPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF241BB14174004EBB6E /* iPhone.png */; };
+		ABBDCF2D1BB14174004EBB6E /* Mac mini.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF261BB14174004EBB6E /* Mac mini.png */; };
+		ABBDCF2E1BB14174004EBB6E /* Mac Pro.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF271BB14174004EBB6E /* Mac Pro.png */; };
+		ABBDCF2F1BB14174004EBB6E /* MacBook.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF281BB14174004EBB6E /* MacBook.png */; };
+		ABBDCF311BB14451004EBB6E /* iPod.png in Resources */ = {isa = PBXBuildFile; fileRef = ABBDCF301BB14451004EBB6E /* iPod.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,7 +93,6 @@
 			children = (
 				AB33E0B51BB035C60006373B /* SmartScrollView */,
 				AB33E0CA1BB035C60006373B /* SmartScrollViewTests */,
-				AB33E0D51BB035C60006373B /* SmartScrollViewUITests */,
 				AB33E0B41BB035C60006373B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -125,6 +124,7 @@
 		AB33E0CA1BB035C60006373B /* SmartScrollViewTests */ = {
 			isa = PBXGroup;
 			children = (
+				AB33E0D51BB035C60006373B /* SmartScrollViewUITests */,
 				AB33E0CB1BB035C60006373B /* SmartScrollViewTests.swift */,
 				AB33E0CD1BB035C60006373B /* Info.plist */,
 			);
@@ -137,7 +137,8 @@
 				AB33E0D61BB035C60006373B /* SmartScrollViewUITests.swift */,
 				AB33E0D81BB035C60006373B /* Info.plist */,
 			);
-			path = SmartScrollViewUITests;
+			name = SmartScrollViewUITests;
+			path = ../SmartScrollViewUITests;
 			sourceTree = "<group>";
 		};
 		ABBDCF211BB14174004EBB6E /* image */ = {

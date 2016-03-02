@@ -15,8 +15,8 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     let scrollContent = UIScrollView()
     let titles = ["iPod","iPad","iPhone","iMac","MacBook","Mac mini","Mac Pro"]
     let titlesWidth:[CGFloat] = [34,33,53,37,72,69,63] // Up to how long a UILabel would be to show a specific word
-    var titleLabels:[UILabel] = [UILabel]() // Store all the UILabels in scrollTitle
-    var titleIndicator:[UIView] = [UIView]() // Store the UIView in scrollTitle
+    var titleLabels = [UILabel]() // Store all the UILabels in scrollTitle
+    var titleIndicator = [UIView]() // Store the UIView in scrollTitle
     
     // MARK: - Main Func
     override func viewDidLoad() {
@@ -57,35 +57,10 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             }
             
             // Add Tap Gesture
-            if i == 0 {
-                let tap = UITapGestureRecognizer()
-                label.addGestureRecognizer(tap)
-                tap.addTarget(self, action: "tapped0")
-            }else if i == 1 {
-                let tap = UITapGestureRecognizer()
-                label.addGestureRecognizer(tap)
-                tap.addTarget(self, action: "tapped1")
-            }else if i == 2 {
-                let tap = UITapGestureRecognizer()
-                label.addGestureRecognizer(tap)
-                tap.addTarget(self, action: "tapped2")
-            }else if i == 3 {
-                let tap = UITapGestureRecognizer()
-                label.addGestureRecognizer(tap)
-                tap.addTarget(self, action: "tapped3")
-            }else if i == 4 {
-                let tap = UITapGestureRecognizer()
-                label.addGestureRecognizer(tap)
-                tap.addTarget(self, action: "tapped4")
-            }else if i == 5 {
-                let tap = UITapGestureRecognizer()
-                label.addGestureRecognizer(tap)
-                tap.addTarget(self, action: "tapped5")
-            }else if i == 6 {
-                let tap = UITapGestureRecognizer()
-                label.addGestureRecognizer(tap)
-                tap.addTarget(self, action: "tapped6")
-            }
+            let tap = UITapGestureRecognizer()
+            label.addGestureRecognizer(tap)
+            let actionName = Selector("tapped\(i)")
+            tap.addTarget(self, action: actionName)
             
             self.titleLabels.append(label)
             self.scrollTitle.addSubview(label)
@@ -135,8 +110,6 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         let x = scrollView.contentOffset.x
         let width = self.view.frame.width
         // Scroll
-        if scrollView == self.scrollTitle{
-        }
         if scrollView == self.scrollContent{
             // Variable
             let index:Int = Int( (x + width/2)/width ) // Main Page Index When Scroll
@@ -150,7 +123,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             }
             
             // Label Color Change
-            for label:UILabel in self.titleLabels {
+            for label in self.titleLabels {
                 if min < 0 {
                     min = 0
                     self.view.backgroundColor = UIColor.whiteColor() // ensure backgroundColor behaves like the "iPod" picture
@@ -209,39 +182,30 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     // MARK: - Tap ScrollTitle
     func tapped0(){
         self.view.backgroundColor = UIColor.whiteColor() // ensure backgroundColor behaves like the "iPod" picture
-        UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-            self.scrollContent.contentOffset.x = (self.view.frame.width)*0
-            }, completion: nil)
+        tapFunc(0)
     }
     func tapped1(){
-        UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-            self.scrollContent.contentOffset.x = (self.view.frame.width)*1
-            }, completion: nil)
+        tapFunc(1)
     }
     func tapped2(){
-        UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-            self.scrollContent.contentOffset.x = (self.view.frame.width)*2
-            }, completion: nil)
+        tapFunc(2)
     }
     func tapped3(){
-        UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-            self.scrollContent.contentOffset.x = (self.view.frame.width)*3
-            }, completion: nil)
+        tapFunc(3)
     }
     func tapped4(){
-        UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-            self.scrollContent.contentOffset.x = (self.view.frame.width)*4
-            }, completion: nil)
+        tapFunc(4)
     }
     func tapped5(){
-        UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-            self.scrollContent.contentOffset.x = (self.view.frame.width)*5
-            }, completion: nil)
+        tapFunc(5)
     }
     func tapped6(){
         self.view.backgroundColor = UIColor.blackColor() // ensure backgroundColor behaves like the "Mac Pro" picture
+        tapFunc(6)
+    }
+    func tapFunc(multiple:CGFloat) {
         UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-            self.scrollContent.contentOffset.x = (self.view.frame.width)*6
+            self.scrollContent.contentOffset.x = (self.view.frame.width) * multiple
             }, completion: nil)
     }
     
