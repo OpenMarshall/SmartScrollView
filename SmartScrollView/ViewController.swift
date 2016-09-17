@@ -23,6 +23,9 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     private let lightBlueColor = UIColor(red:0.23, green:0.51, blue:0.85, alpha:1.00)
     private let darkBlueColor = UIColor(red:0.04, green:0.31, blue:0.62, alpha:1.00)
     
+    private let animationDuration: TimeInterval = 0.8
+    private let animationDamping: CGFloat = 0.7
+    private let animationSpringVelocity: CGFloat = 1
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -68,7 +71,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
                 label.textColor = selectedTextColor
             }
             
-            // Add Tap Gesture
+            // 点击事件
             var sel = #selector(ViewController.lableTapped0)
             switch i {
             case 1:
@@ -130,7 +133,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     }
     
     
-    // MARK: - Detect Scroll ActionwithDuration
+    // MARK: - 监测内容滑动
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
 
         guard scrollView == scrollContentView else {return}
@@ -139,12 +142,12 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         let screenWidth = view.frame.width
         let horizontalInterval: CGFloat = 30
             
-        let index:Int = Int( (offsetX + screenWidth/2)/screenWidth ) // Main Page Index When Scroll
-        var min:Int = Int(ceil( offsetX/screenWidth )) - 1 // Left Page Index When Scroll
-        var max:Int = min + 1 // Right Page Index When Scroll
+        let index = Int( (offsetX + screenWidth/2)/screenWidth ) // Current Page Index When Scroll
+        var min = Int(ceil( offsetX/screenWidth )) - 1 // Left Page Index When Scroll
+        var max = min + 1 // Right Page Index When Scroll
         let mid:CGFloat = offsetX/screenWidth // Scroll Point
         
-        // Label Color Change
+        // 改变标题 Label 颜色
         for label in labels {
             if min < 0 {
                 min = 0
@@ -168,12 +171,13 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             }
         }
         
-        // Indicator Change (position & length)
+        // 改变 indicator 横条的位置和长度
         for label in labels {
             guard index < labelTexts.count else { continue }
             
             if label.text == labelTexts[index] {
-                UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+                UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: animationDamping,
+                               initialSpringVelocity: animationSpringVelocity, options: .allowAnimatedContent, animations: {
                     self.indicator.frame = CGRect(
                         x: label.frame.origin.x, // same position with the selected label
                         y: self.indicator.frame.origin.y,
@@ -183,15 +187,15 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             }
         }
         
-        // Scroll
-        var selectedTitleCenterX:CGFloat = 15
+        // 内容滚动带动标题滚动
+        var selectedTitleCenterX: CGFloat = 15
         for i in 0...index {
             selectedTitleCenterX += labelWidths[i] + horizontalInterval
         }
         selectedTitleCenterX -= labelWidths[index]
         
-        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.7,
-                       initialSpringVelocity: 1, options: .allowAnimatedContent, animations: {
+        UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: animationDamping,
+                       initialSpringVelocity: animationSpringVelocity, options: .allowAnimatedContent, animations: {
                         
                         let tempOffset = selectedTitleCenterX - screenWidth/2
                         let minOffset: CGFloat = 0
@@ -207,7 +211,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     }
     
     
-    // MARK: - Tap ScrollTitle
+    // MARK: - 滑动标题点击事件
     func lableTapped0() {
         view.backgroundColor = UIColor.white // iPod Image BgColor
         lableTapped(selectedLabelIndex: 0)
@@ -223,7 +227,8 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     }
     
     private func lableTapped(selectedLabelIndex:Int) {
-        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+        UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: animationDamping,
+                       initialSpringVelocity: animationSpringVelocity, options: .allowAnimatedContent, animations: {
             self.scrollContentView.contentOffset.x = (self.view.frame.width) * CGFloat(selectedLabelIndex)
             }, completion: nil)
     }
