@@ -10,93 +10,119 @@ import UIKit
 
 class ViewController: UIViewController, UIScrollViewDelegate {
     
-    // MARK: - Constant & Variable
-    let scrollTitle = UIScrollView()
-    let scrollContent = UIScrollView()
-    let titles = ["iPod","iPad","iPhone","iMac","MacBook","Mac mini","Mac Pro"]
-    let titlesWidth:[CGFloat] = [34,33,53,37,72,69,63] // Up to how long a UILabel would be to show a specific word
-    var titleLabels = [UILabel]() // Store all the UILabels in scrollTitle
-    var titleIndicator = [UIView]() // Store the UIView in scrollTitle
     
-    // MARK: - Main Func
+    private let scrollTitleView = UIScrollView()
+    private let scrollContentView = UIScrollView()
+    private let labelTexts = ["iPod","iPad","iPhone","iMac","MacBook","Mac mini","Mac Pro"]
+    private let labelWidths :[CGFloat] = [34,33,53,37,72,69,63]
+    private var labels = [UILabel]()
+    private var indicator = UIView() // label 下方的深蓝色横条
+    
+    private let selectedTextColor = UIColor.white
+    private let unselectedTextColor = UIColor.lightGray
+    private let lightBlueColor = UIColor(red:0.23, green:0.51, blue:0.85, alpha:1.00)
+    private let darkBlueColor = UIColor(red:0.04, green:0.31, blue:0.62, alpha:1.00)
+    
+    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //1.Creat ScorllView
-        self.scrollTitle.frame = CGRectMake(0, 0, self.view.frame.width, 40)
-        self.scrollContent.frame = CGRectMake(0, 40, self.view.frame.width, self.view.frame.height-40)
-
-        self.scrollTitle.backgroundColor = UIColor(red:0.23, green:0.51, blue:0.85, alpha:1)
+        // 配置 ScrollView
+        let scrollTitleHeight: CGFloat = 60
+        scrollTitleView.frame = CGRect(x: 0, y: 0,
+                                          width: view.frame.width, height: scrollTitleHeight)
+        scrollContentView.frame = CGRect(x: 0, y: scrollTitleHeight,
+                                          width: view.frame.width, height: view.frame.height-scrollTitleHeight)
+        scrollTitleView.backgroundColor = lightBlueColor
+        scrollContentView.isPagingEnabled = true
+        scrollTitleView.showsHorizontalScrollIndicator = false
+        scrollContentView.showsHorizontalScrollIndicator = false
         
-        self.scrollContent.pagingEnabled = true
+        scrollTitleView.delegate = self
+        scrollContentView.delegate = self
         
-        self.scrollTitle.showsHorizontalScrollIndicator = false
-        self.scrollContent.showsHorizontalScrollIndicator = false
+        view.addSubview(scrollTitleView)
+        view.addSubview(scrollContentView)
         
-        self.scrollTitle.delegate = self
-        self.scrollContent.delegate = self
+        // 可滑动顶部标题
+        let leftMargin: CGFloat = 15
+        let topMargin: CGFloat = 30
+        let horizontalInterval: CGFloat = 30
+        let labelHeight: CGFloat = 20
+        let indicatorHeight: CGFloat = 5
+        var originX: CGFloat = 0
         
-        self.view.addSubview(self.scrollTitle)
-        self.view.addSubview(self.scrollContent)
-        
-        //2.Add Content
-        
-        // Part I - ScrollTitle
-        var tempX:CGFloat = 0
-        for var i = 0; i < titles.count; i++ {
+        for i in 0 ..< labelTexts.count {
+            guard (labelTexts.count == labelWidths.count) else {continue}
             
-            let label = UILabel(frame: CGRectMake(tempX+15, 10, titlesWidth[i], 21))
-            tempX = tempX + 30 + titlesWidth[i]
-            label.text = titles[i]
-            label.textAlignment = NSTextAlignment.Center
+            let label = UILabel(frame: CGRect(x: originX+leftMargin, y: topMargin,
+                                              width: labelWidths[i], height: labelHeight))
+            originX += horizontalInterval + labelWidths[i]
+            label.text = labelTexts[i]
+            label.textAlignment = .center
             label.adjustsFontSizeToFitWidth = true
-            label.userInteractionEnabled = true
-            label.textColor = UIColor.grayColor()
+            label.isUserInteractionEnabled = true
+            label.textColor = unselectedTextColor
             if i == 0 {
-                label.textColor = UIColor.blackColor() // "iPod"'s Initial Color is Black, others' are Gray
+                label.textColor = selectedTextColor
             }
             
             // Add Tap Gesture
-            let tap = UITapGestureRecognizer()
-            label.addGestureRecognizer(tap)
-            let actionName = Selector("tapped\(i)")
-            tap.addTarget(self, action: actionName)
-            
-            self.titleLabels.append(label)
-            self.scrollTitle.addSubview(label)
-        }
-        
-        let indicator = UIView(frame: CGRectMake(15, 35, titlesWidth[0], 5))
-        indicator.backgroundColor = UIColor(red:0.04, green:0.31, blue:0.62, alpha:1)
-        self.titleIndicator.append(indicator)
-        self.scrollTitle.addSubview(indicator)
-        
-        // Part II - ScrollContent
-        var tempX2:CGFloat = 0
-        for var i = 0; i < titles.count; i++ {
-            
-            let imageView = UIImageView(frame: CGRectMake(tempX2, 0, self.view.frame.width, self.view.frame.height-40))
-            imageView.image = UIImage(named: titles[i])
-            imageView.contentMode = UIViewContentMode.ScaleAspectFit
-            if titles[i] == "iPad" {
-                imageView.backgroundColor = UIColor(red:0.91, green:0.91, blue:0.91, alpha:1)
-            }else if titles[i] == "iPhone"{
-                imageView.backgroundColor = UIColor(red:0.98, green:0.98, blue:0.98, alpha:1)
-            }else if titles[i] == "MacBook"{
-                imageView.backgroundColor = UIColor(red:0.99, green:0.99, blue:0.99, alpha:1)
-            }else if titles[i] == "Mac Pro"{
-                imageView.backgroundColor = UIColor.blackColor()
-            }else{
-                imageView.backgroundColor = UIColor.whiteColor()
+            var sel = #selector(ViewController.lableTapped0)
+            switch i {
+            case 1:
+                sel = #selector(ViewController.lableTapped1)
+            case 2:
+                sel = #selector(ViewController.lableTapped2)
+            case 3:
+                sel = #selector(ViewController.lableTapped3)
+            case 4:
+                sel = #selector(ViewController.lableTapped4)
+            case 5:
+                sel = #selector(ViewController.lableTapped5)
+            case 6:
+                sel = #selector(ViewController.lableTapped6)
+            default:
+                break
             }
-            tempX2 += self.view.frame.width
+            label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: sel))
             
-            self.scrollContent.addSubview(imageView)
+            labels.append(label)
+            scrollTitleView.addSubview(label)
         }
         
-        //3.Set Content Size
-        self.scrollTitle.contentSize = CGSizeMake(tempX, 0)
-        self.scrollContent.contentSize = CGSizeMake(tempX2, 0)
+        indicator = UIView(frame: CGRect(x: leftMargin, y: topMargin+labelHeight+indicatorHeight,
+                                             width: labelWidths[0], height: indicatorHeight))
+        indicator.backgroundColor = darkBlueColor
+        scrollTitleView.addSubview(indicator)
+        scrollTitleView.contentSize = CGSize(width: originX, height: 0)
+        
+        // 可滑动内容
+        originX = 0
+        
+        for i in 0 ..< labelTexts.count {
+            let imageView = UIImageView(frame:
+                CGRect(x: originX, y: 0, width: view.frame.width, height: view.frame.height-scrollTitleHeight))
+            imageView.image = UIImage(named: labelTexts[i])
+            imageView.contentMode = .scaleAspectFit
+            switch labelTexts[i] {
+            case "iPad":
+                imageView.backgroundColor = UIColor(red:0.98, green:0.98, blue:0.98, alpha:1.00)
+            case "iPhone":
+                imageView.backgroundColor = UIColor(red:0.07, green:0.07, blue:0.07, alpha:1.00)
+            case "MacBook":
+                imageView.backgroundColor = UIColor(red:0.98, green:0.98, blue:0.98, alpha:1.00)
+            case "Mac Pro":
+                imageView.backgroundColor = UIColor.black
+            default:
+                imageView.backgroundColor = UIColor.white
+            }
+            originX += view.frame.width
+            
+            scrollContentView.addSubview(imageView)
+        }
+        scrollContentView.contentSize = CGSize(width: originX, height: 0)
     }
 
     override func didReceiveMemoryWarning() {
@@ -104,116 +130,108 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     }
     
     
-    // MARK: - Detect Scroll Action
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        // Variable
-        let x = scrollView.contentOffset.x
-        let width = self.view.frame.width
-        // Scroll
-        if scrollView == self.scrollContent{
-            // Variable
-            let index:Int = Int( (x + width/2)/width ) // Main Page Index When Scroll
-            var min:Int = Int(ceil( x/width )) - 1 // Left Page Index When Scroll
-            var max:Int = min + 1 // Right Page Index When Scroll
-            let mid:CGFloat = x/width // Scroll Point
+    // MARK: - Detect Scroll ActionwithDuration
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
 
-            var offset:CGFloat = 0
-            for var i = 0; i <= index; i++ {
-                offset += 30 + titlesWidth[i]
+        guard scrollView == scrollContentView else {return}
+        
+        let offsetX = scrollView.contentOffset.x
+        let screenWidth = view.frame.width
+        let horizontalInterval: CGFloat = 30
+            
+        let index:Int = Int( (offsetX + screenWidth/2)/screenWidth ) // Main Page Index When Scroll
+        var min:Int = Int(ceil( offsetX/screenWidth )) - 1 // Left Page Index When Scroll
+        var max:Int = min + 1 // Right Page Index When Scroll
+        let mid:CGFloat = offsetX/screenWidth // Scroll Point
+        
+        // Label Color Change
+        for label in labels {
+            if min < 0 {
+                min = 0
+                view.backgroundColor = UIColor.white // iPod Image BgColor
+            }
+            if max >= labelTexts.count {
+                max = labelTexts.count - 1
+                view.backgroundColor = UIColor.black // Mac Pro Image BgColor
             }
             
-            // Label Color Change
-            for label in self.titleLabels {
-                if min < 0 {
-                    min = 0
-                    self.view.backgroundColor = UIColor.whiteColor() // ensure backgroundColor behaves like the "iPod" picture
+            if label.text == labelTexts[min] {
+                if min == max {
+                    label.textColor = UIColor.white
+                }else {
+                    label.textColor = UIColor(white: 0.67 + 0.33*(CGFloat(max)-mid), alpha: 1.00)
                 }
-                if max >= titles.count {
-                    max = titles.count - 1
-                    self.view.backgroundColor = UIColor.blackColor() // ensure backgroundColor behaves like the "Mac Pro" picture
-                }
-                
-                if label.text == titles[min] {
-                    var rgbValue = 0.5 - 0.5*(CGFloat(max)-mid)
-                    if min == max { // Cause min cannot less than 0, do this to deal with the "max==min==mid==0"
-                        rgbValue = 0
-                    }
-                    label.textColor = UIColor(red: rgbValue, green: rgbValue, blue: rgbValue, alpha: 1)
-                }else if label.text == titles[max] {
-                    let rgbValue = 0.5 - 0.5*(mid-CGFloat(min))
-                    label.textColor = UIColor(red: rgbValue, green: rgbValue, blue: rgbValue, alpha: 1)
-                }else{
-                    label.textColor = UIColor.grayColor()
-                }
+            }else if label.text == labelTexts[max] {
+                label.textColor = UIColor(white: 0.67 + 0.33*(mid-CGFloat(min)), alpha: 1.00)
+            }else {
+                label.textColor = unselectedTextColor
             }
+        }
+        
+        // Indicator Change (position & length)
+        for label in labels {
+            guard index < labelTexts.count else { continue }
             
-            // Indicator Change (position & length)
-            let indicator = self.titleIndicator[0]
-            
-            for label:UILabel in self.titleLabels {
-                if label.text == titles[index] {
-                    UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-                        indicator.frame = CGRectMake(
-                            label.frame.origin.x, // same position with the selected label
-                            indicator.frame.origin.y,
-                            self.titlesWidth[index], // same length with the selected label
-                            indicator.frame.height)
-                        }, completion: nil)
-                }
-            }
-            
-            // Scroll
-            if offset > width-30{ // Title almost beyond screen edge
-                UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-                    if self.scrollTitle.contentOffset.x < offset - width { // Let title scroll forward, not backward
-                        self.scrollTitle.contentOffset.x = offset - width
-                    }
-                    }, completion: nil)
-            }
-            if offset < width {
-                UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-                    self.scrollTitle.contentOffset.x = 0
+            if label.text == labelTexts[index] {
+                UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+                    self.indicator.frame = CGRect(
+                        x: label.frame.origin.x, // same position with the selected label
+                        y: self.indicator.frame.origin.y,
+                        width: self.labelWidths[index], // same length with the selected label
+                        height: self.indicator.frame.height)
                     }, completion: nil)
             }
         }
-    }
-    
-    
-    // MARK: - Tap ScrollTitle
-    func tapped0(){
-        self.view.backgroundColor = UIColor.whiteColor() // ensure backgroundColor behaves like the "iPod" picture
-        tapFunc(0)
-    }
-    func tapped1(){
-        tapFunc(1)
-    }
-    func tapped2(){
-        tapFunc(2)
-    }
-    func tapped3(){
-        tapFunc(3)
-    }
-    func tapped4(){
-        tapFunc(4)
-    }
-    func tapped5(){
-        tapFunc(5)
-    }
-    func tapped6(){
-        self.view.backgroundColor = UIColor.blackColor() // ensure backgroundColor behaves like the "Mac Pro" picture
-        tapFunc(6)
-    }
-    func tapFunc(multiple:CGFloat) {
-        UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-            self.scrollContent.contentOffset.x = (self.view.frame.width) * multiple
+        
+        // Scroll
+        var selectedTitleCenterX:CGFloat = 15
+        for i in 0...index {
+            selectedTitleCenterX += labelWidths[i] + horizontalInterval
+        }
+        selectedTitleCenterX -= labelWidths[index]
+        
+        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.7,
+                       initialSpringVelocity: 1, options: .allowAnimatedContent, animations: {
+                        
+                        let tempOffset = selectedTitleCenterX - screenWidth/2
+                        let minOffset: CGFloat = 0
+                        let maxOffset = self.scrollTitleView.contentSize.width - screenWidth
+                        if tempOffset > maxOffset {
+                            self.scrollTitleView.contentOffset.x = maxOffset
+                        }else if tempOffset < minOffset {
+                            self.scrollTitleView.contentOffset.x = minOffset
+                        }else {
+                            self.scrollTitleView.contentOffset.x = tempOffset
+                        }
             }, completion: nil)
     }
     
     
-    // MARK: - Hide Status Bar
-    override func prefersStatusBarHidden() -> Bool {
-        return true
+    // MARK: - Tap ScrollTitle
+    func lableTapped0() {
+        view.backgroundColor = UIColor.white // iPod Image BgColor
+        lableTapped(selectedLabelIndex: 0)
     }
-
+    func lableTapped1() { lableTapped(selectedLabelIndex: 1) }
+    func lableTapped2() { lableTapped(selectedLabelIndex: 2) }
+    func lableTapped3() { lableTapped(selectedLabelIndex: 3) }
+    func lableTapped4() { lableTapped(selectedLabelIndex: 4) }
+    func lableTapped5() { lableTapped(selectedLabelIndex: 5) }
+    func lableTapped6() {
+        view.backgroundColor = UIColor.black // Mac Pro Image BgColor
+        lableTapped(selectedLabelIndex: 6)
+    }
+    
+    private func lableTapped(selectedLabelIndex:Int) {
+        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+            self.scrollContentView.contentOffset.x = (self.view.frame.width) * CGFloat(selectedLabelIndex)
+            }, completion: nil)
+    }
+    
+    
+    // MARK: - Status Bar Style
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 }
 
