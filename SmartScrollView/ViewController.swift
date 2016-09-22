@@ -51,17 +51,16 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         // 可滑动顶部标题
         let leftMargin: CGFloat = 15
         let topMargin: CGFloat = 30
-        let horizontalInterval: CGFloat = 30
         let labelHeight: CGFloat = 20
         let indicatorHeight: CGFloat = 5
         var originX: CGFloat = 0
         
         for i in 0 ..< labelTexts.count {
-            guard (labelTexts.count == labelWidths.count) else {continue}
+            guard (labelTexts.count == labelWidths.count) else {break}
             
             let label = UILabel(frame: CGRect(x: originX+leftMargin, y: topMargin,
                                               width: labelWidths[i], height: labelHeight))
-            originX += horizontalInterval + labelWidths[i]
+            originX += 30 + labelWidths[i]
             label.text = labelTexts[i]
             label.textAlignment = .center
             label.adjustsFontSizeToFitWidth = true
@@ -76,16 +75,22 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             switch i {
             case 1:
                 sel = #selector(ViewController.lableTapped1)
+                break
             case 2:
                 sel = #selector(ViewController.lableTapped2)
+                break
             case 3:
                 sel = #selector(ViewController.lableTapped3)
+                break
             case 4:
                 sel = #selector(ViewController.lableTapped4)
+                break
             case 5:
                 sel = #selector(ViewController.lableTapped5)
+                break
             case 6:
                 sel = #selector(ViewController.lableTapped6)
+                break
             default:
                 break
             }
@@ -107,19 +112,25 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         for i in 0 ..< labelTexts.count {
             let imageView = UIImageView(frame:
                 CGRect(x: originX, y: 0, width: view.frame.width, height: view.frame.height-scrollTitleHeight))
-            imageView.image = UIImage(named: labelTexts[i])
+            let imageName = labelTexts[i]
+            imageView.image = UIImage(named:imageName)
             imageView.contentMode = .scaleAspectFit
-            switch labelTexts[i] {
+            switch imageName {
             case "iPad":
                 imageView.backgroundColor = UIColor(red:0.98, green:0.98, blue:0.98, alpha:1.00)
+                break
             case "iPhone":
                 imageView.backgroundColor = UIColor(red:0.07, green:0.07, blue:0.07, alpha:1.00)
+                break
             case "MacBook":
                 imageView.backgroundColor = UIColor(red:0.98, green:0.98, blue:0.98, alpha:1.00)
+                break
             case "Mac Pro":
                 imageView.backgroundColor = UIColor.black
+                break
             default:
                 imageView.backgroundColor = UIColor.white
+                break
             }
             originX += view.frame.width
             
@@ -140,7 +151,6 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         
         let offsetX = scrollView.contentOffset.x
         let screenWidth = view.frame.width
-        let horizontalInterval: CGFloat = 30
             
         let index = Int( (offsetX + screenWidth/2)/screenWidth ) // Current Page Index When Scroll
         var min = Int(ceil( offsetX/screenWidth )) - 1 // Left Page Index When Scroll
@@ -190,7 +200,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         // 内容滚动带动标题滚动
         var selectedTitleCenterX: CGFloat = 15
         for i in 0...index {
-            selectedTitleCenterX += labelWidths[i] + horizontalInterval
+            selectedTitleCenterX += labelWidths[i] + 30
         }
         selectedTitleCenterX -= labelWidths[index]
         
